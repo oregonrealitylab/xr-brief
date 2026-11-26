@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Prof Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ship's-log column. One narrow reading column; each beat carries its own
+   colour on a left rule and on its chips, so you always know which beat you are in. */
+:root{
+  --paper:#f3f6f8; --card:#ffffff; --ink:#12222e; --muted:#566773; --rule:#d3dce2;
+  --xr:#5a3fd6; --sea:#0b7a75; --lab:#b0600c;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+    --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+  --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit;text-decoration-color:var(--muted);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--xr);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:28px}
+
+header.mast{display:flex;flex-direction:column;gap:6px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+.kicker,.chip,nav a,.beat h2 span,.meta,.src,h3.sub{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.kicker{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;font-weight:600;text-decoration:none;padding:7px 11px;border:1.5px solid currentColor;border-radius:3px}
+nav a.xr{color:var(--xr)} nav a.sea{color:var(--sea)} nav a.lab{color:var(--lab)}
+
+.top{background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.top h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em}
+.top ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.beat{display:flex;flex-direction:column;gap:18px}
+.beat h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.05;margin:0;text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;border-bottom:2px solid var(--c);padding-bottom:6px;color:var(--c)}
+.beat h2 span{font-size:14px;font-weight:600;color:var(--muted)}
+.beat.xr{--c:var(--xr)} .beat.sea{--c:var(--sea)} .beat.lab{--c:var(--lab)}
+
+article{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:7px}
+.chip{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:1px 7px}
+article h3{font-family:var(--body);font-weight:600;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+article p{margin:0;max-width:65ch}
+.why{color:var(--muted);font-size:16px}
+.why b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+.src{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 12px}
+
+h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
+ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
+ul.short li::marker{color:var(--c)}
+
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
+footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
+@media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Daily edition · XR, oceans, interaction research</div>
+  <h1>XR Prof Morning Brief</h1>
+  <div class="meta"><span>Tuesday 24 November 2026</span><span>15 minute read</span><span>Covers 21–24 Nov</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a class="xr" href="#xr">XR industry · 6 min</a>
+  <a class="sea" href="#ocean">Marine science · 5 min</a>
+  <a class="lab" href="#research">XR interaction research · 4 min</a>
+</nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
+
+<section class="top" aria-label="Top three">
+  <h2>If you only read three things</h2>
+  <ol>
+    <li>Meta's hands-only contest drew 2,105 entries, triple last year's, and about a third list web technology instead of Unity or Unreal (one outlet's count of public data).</li>
+    <li>Eddy-covariance measurements in the Baltic tracked 73 organic gases moving between sea and air, with the mix shifting as a cyanobacteria bloom faded (<i>Nature Communications</i>).</li>
+    <li>ISS 2026 gave its best paper to Fluidic Body, which steers a robot swarm as a soft or stiff "fluid" extension of the hand (17 participants in VR).</li>
+  </ol>
+</section>
+
+<section class="beat xr" id="xr">
+  <h2>XR industry <span>5 items · 6 min</span></h2>
+
+  <article>
+    <span class="chip">Report · Platform</span>
+    <h3>Meta's hands-only contest: 2,105 entries, a third built on web tech</h3>
+    <p>Thanksgiving week is quiet: no hardware, funding or platform announcements, so this follow-up leads. VR.org counted the public Devpost gallery for Meta's Start competition, which closed on 18 November, and found 2,105 projects from 7,247 registrants, against 655 and 2,860 last year. From self-listed "Built With" tags, Unity's share fell from 68.1% to 51.5%, web technology (WebXR, Immersive Web SDK, three.js) rose from 11.6% to 34.6%, and Unreal fell to 3.8%. About 84% of entries name a single creator, and roughly one in six names an AI coding assistant.</p>
+    <p class="why"><b>Why it matters</b> It is rare numerical evidence of what XR developers build with, and it bears on what to teach. Caveats: one outlet's scrape of free-text tags, compared against a different form field in 2025, and Meta has published no official count.</p>
+    <div class="src"><a href="https://vr.org/articles/meta-vr-start-competition-2105-entries-20-prizes-one-in-three-web-2026">VR.org analysis</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Platform</span>
+    <h3>Walkabout Mini Golf stops making new courses for Pico</h3>
+    <p>Mighty Coconut's next course, Valhalla Splash, arrives on 3 December for Quest, PC VR and PS VR2, and not for Pico. The studio told UploadVR that October's course was its last new release there, because testing and release costs exceed the revenue. Existing Pico purchases still work, and cross-platform multiplayer continues for as long as the studio can manage.</p>
+    <p class="why"><b>Why it matters</b> One of VR's most durable titles finds a major headset platform not worth a port, days after Pico opened a $50,000 developer contest. Single source.</p>
+    <div class="src"><a href="https://www.uploadvr.com/walkabout-mini-golf-valhalla-splash-dlc-drops-next-week/">UploadVR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>A VR mod for the new Ocarina of Time remake</h3>
+    <p>HookshotVR, by a modder called SqueezyLemonade, forks an open-source PC recompilation of the Switch 2 remake and adds first-person view, tracked controllers, a wrist display and a launcher. It uses OpenXR, is at version 1.0.2 on GitHub, and needs your own copy of the game. Road to VR reports good results on Linux with an RTX 4070 and a Quest 3; the article calls it technically still in alpha.</p>
+    <p class="why"><b>Why it matters</b> It extends last week's mod thread: recompilation plus OpenXR put a current console exclusive into VR within months of release. The legal exposure is my inference, not the article's.</p>
+    <div class="src"><a href="https://roadtovr.com/zelda-ocarina-of-time-remake-vr-hack/">Road to VR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Platform</span>
+    <h3>SteamVR beta brings chroma-key passthrough to Quest</h3>
+    <p>SteamVR 2.19.4 beta, posted by Valve on 19 November, adds chroma key to Room View for Quest headsets streaming over Steam Link: wherever a game draws the key colour, the headset shows its camera view. Steam Frame gained the same option on 13 November. VR.org did not test it, Valve does not state the key colour or supported models, and I did not open Valve's own notes.</p>
+    <p class="why"><b>Why it matters</b> A cheap route to mixed reality in PC VR projects, with no per-pixel transparency needed.</p>
+    <div class="src"><a href="https://vr.org/articles/steamvr-2-19-4-beta-steam-link-quest-chroma-key-room-view-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Watchlist</span>
+    <h3>Also noted, and dates ahead</h3>
+    <ul class="short">
+      <li><b>Steam Frame</b> A SteamDB snapshot from 19 November lists 312 "Standalone Verified" games, of which 101 carry a VR tag. Third-hand, via MIXED. <a href="https://mixed-news.com/en/steam-frame-300-standalone-verified-games-flat-screen-vr">MIXED</a></li>
+      <li><b>2 Dec, rumour</b> A Chinese outlet reported a Pico Space Pro launch on this date. Pico has not confirmed. <a href="https://vr.org/articles/pico-space-pro-december-2-launch-report-knoxlabs-listing-pulled-2026">VR.org</a></li>
+      <li><b>3–9 Dec</b> The VR Forever Awards name winners on the 3rd, opening a Steam festival with demos and discounts on more than 220 VR games. One judge writes for 9to5Google, and the organiser's own game is nominated. <a href="https://roadtovr.com/vr-forever-awards-steam-discounts-dec-2026/">Road to VR</a></li>
+      <li><b>Around 11 Dec</b> Meta names the Start winners; judging ends around the 9th.</li>
+    </ul>
+  </article>
+</section>
+
+<section class="beat sea" id="ocean">
+  <h2>Marine science <span>4 items + briefs · 5 min</span></h2>
+
+  <article>
+    <span class="chip">Air–sea · Climate</span>
+    <h3>The sea trades at least 73 organic gases with the air</h3>
+    <p>A University of Copenhagen-led team measured fluxes of volatile organic compounds by eddy covariance at Utö island in the Baltic for 51 days in summer 2024. They tracked 73 compounds, 48 of them identified, which the release puts at roughly ten times more than most earlier studies. Dimethyl sulphide emission peaked in late July and fell to near zero by late August as cyanobacteria declined. Acetone and acetaldehyde were steadily absorbed by the sea, and acetic acid was emitted.</p>
+    <p class="why"><b>Why it matters</b> Climate models represent marine trace gases with a few compounds and little seasonality. This is one site over one season, with 50 to 100% uncertainty on the unidentified compounds.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s41467-026-79437-1">Nature Communications</a><a href="https://sciencesources.eurekalert.org/news-releases/1152772">Release</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Carbon</span>
+    <h3>A global map of where marine carbon removal works best</h3>
+    <p>Published today, this modelling study puts three approaches in one framework: adding alkalinity, extracting dissolved carbon directly, and combined additions such as the ocean end of enhanced rock weathering. One-month pulses were released in 690 ocean regions in four seasons and followed for 15 years. Direct removal approaches full efficiency in most subpolar and equatorial regions but falls short in the subtropics and high latitudes. For combined additions, 3 to 20% of the stored CO<sub>2</sub> has leaked back by year 15, more than an earlier estimate of about 10%.</p>
+    <p class="why"><b>Why it matters</b> Verification schemes need a common yardstick across methods and places. It is one coarse model with fixed atmospheric CO<sub>2</sub>, no coastal detail, and no accounting for upstream emissions.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s41467-026-78856-4">Nature Communications</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Deep sea</span>
+    <h3>A drowned coral atoll on the Mid-Atlantic Ridge</h3>
+    <p>Schmidt Ocean Institute reports that a 35-day Brazilian-led expedition on R/V <i>Falkor (too)</i> surveyed the 950 km Romanche Fracture Zone. It found a sunken atoll about 300 m tall, its top 900 m down, with living corals on it. The release dates it to about 5 million years and says it confirms a 30-year-old hypothesis that atolls once stood in the mid-Atlantic.</p>
+    <p class="why"><b>Why it matters</b> It is the first visual survey of one of the Atlantic's largest fracture zones, and a candidate for high-seas protection. This is a press release, not a paper: no dating method is given, and the new species are suspected, not confirmed.</p>
+    <div class="src"><a href="https://schmidtocean.org/scientists-discover-sunken-prehistoric-coral-island-rich-with-sea-life-on-mid-atlantic-ridge/">Schmidt Ocean Institute</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Nutrients</span>
+    <h3>Organic nitrogen makes up a quarter of what the air feeds the ocean</h3>
+    <p>A <i>Science</i> paper from 20 November, led from Hong Kong and Shenzhen, analysed 418 marine aerosol samples from 21 cruises and combined them with a global atmospheric chemistry model. It puts organic nitrogen deposition to the oceans at 12.8 million tonnes a year, about 27% of all nitrogen deposited. Biomass burning is the largest source, and fires and human activity together supply about 70%.</p>
+    <p class="why"><b>Why it matters</b> Most ocean biogeochemistry models count only inorganic nitrogen. I read the release only; the global total is model-derived, and the release does not say how much of this nitrogen organisms can use.</p>
+    <div class="src"><a href="https://sciencesources.eurekalert.org/news-releases/1152829">Release</a><a href="https://doi.org/10.1126/science.aeg4265">Science</a></div>
+  </article>
+
+  <h3 class="sub">In brief</h3>
+  <ul class="short">
+    <li><b>Fisheries</b> An ecosystem model of US West Coast waters finds that broad culls of seals, sea lions and seabirds would do little for salmon, while fewer Pacific hake helped most. <i>Science</i>, 19 November; the release gives no effect sizes. <a href="https://sciencesources.eurekalert.org/news-releases/1151922">Release</a></li>
+    <li><b>Penguins</b> Tracks of 48 juvenile emperor penguins from three Weddell Sea colonies show a shared yearly loop of over 1,500 km. One colony's juveniles spent more than 60% of February and March in recently fished krill zones. Release only. <a href="https://sciencesources.eurekalert.org/news-releases/1152498">Release</a></li>
+  </ul>
+</section>
+
+<section class="beat lab" id="research">
+  <h2>XR interaction research <span>6 items · 4 min</span></h2>
+
+  <article>
+    <span class="chip">Awards · ISS</span>
+    <h3>Best paper: a robot swarm as a fluid extension of the hand</h3>
+    <p>ISS 2026 in Turin has posted its awards. Best paper goes to Fluidic Body (Eguchi and colleagues, Tsukuba and OMRON SINIC X), presented today. Each robot is a particle in a fluid simulation: an open hand makes the swarm flow around obstacles, and a closed hand makes it hold together to push objects. In a VR study with 17 people, all completed a combined avoid-and-transport task, against 8 with a standard collision-avoidance controller. Workload roughly halved and sense of agency rose.</p>
+    <p class="why"><b>Why it matters</b> A clear mapping for controlling many bodies with one hand. Simpler single tasks showed no reliable difference, and the fixed-parameter baseline may flatter the result.</p>
+    <div class="src"><a href="https://iss.acm.org/2026/program/awards/">ISS awards</a><a href="https://arxiv.org/pdf/2611.06068">arXiv 2611.06068</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Accessibility · ISS</span>
+    <h3>For autistic adults, how a cue starts matters more than how many there are</h3>
+    <p>An ISS honourable mention, presented remotely tomorrow. Meng, Chen and colleagues had 20 autistic adults in China try five versions of the same science content on Quest 3, from plain text to gaze-triggered light and sound with forearm vibration and warmth. Abrupt, click-triggered spatial audio scored lowest (2.97 of 5). Gradual gaze-triggered cues scored 4.05 and the full multisensory version 4.43, though its lead over plain text was not statistically significant.</p>
+    <p class="why"><b>Why it matters</b> It questions the habit of equating "sensory-friendly" with "less". Each condition bundled several changes at once, so no single factor is isolated.</p>
+    <div class="src"><a href="https://arxiv.org/pdf/2610.23833">arXiv 2610.23833</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Tools · ISS</span>
+    <h3>AdapTest lets designers test adaptive interfaces inside the headset</h3>
+    <p>Rhee and colleagues (KAIST, with Adobe Research and NUS) pair a web editor with a visionOS app. Designers write if-then rules over viewing distance, brightness and occlusion, then try them live. Against Figma with static previews, 12 designers covered 2.4 of 3 environmental factors, up from 1.4, and tested about five times as often. Workload and usability scores did not differ, and the two tools were given different tasks and time limits.</p>
+    <div class="src"><a href="https://arxiv.org/pdf/2610.21386">arXiv 2610.21386</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Telepresence</span>
+    <h3>Steering a robot's camera with your head beats a joystick</h3>
+    <p>Zaman, Veas and colleagues ran a two-by-two study with 17 operators guiding a quadruped robot through a physical maze from a headset. Head-guided camera control went with faster completion, fewer wall contacts and lower workload. An omnidirectional treadmill improved the experience but not performance. Abstract only, and it gives no effect sizes.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.23939">arXiv 2611.23939</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Conference</span>
+    <h3>Dates: IEEE VR decisions on Monday, CHI resubmissions next week</h3>
+    <p>IEEE VR 2027 (Melbourne) sends first-round notifications on 30 November, with revisions due 31 December. CHI 2027's dates table lists resubmission on 3 December and notification on 17 December; a banner on the same site says the deadline has passed, so check before relying on it. MUM 2026 runs in Glasgow from 1 to 4 December.</p>
+    <div class="src"><a href="https://listserv.uni-tuebingen.de/pipermail/ieee_vis/2026/003316.html">IEEE VR call</a><a href="https://chi2027.acm.org/">CHI 2027</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Reading list</span>
+    <h3>Three to skim</h3>
+    <ul class="short">
+      <li><b>Self-views in social VR</b> Krug, Dachselt and colleagues (ISS, tomorrow; published a year ago): of 32 people in pairs, 24 wanted a self-view. A miniature avatar on the table ranked best and a personal mirror worst. <a href="https://mt.inf.tu-dresden.de/cnt/uploads/iss25main-p1172-p-eb40ff5fe5-162788-final.pdf">Author PDF</a></li>
+      <li><b>Security</b> MetaScanner (Lee, Kim and colleagues, accepted at <i>Computers &amp; Security</i>) demonstrates four deceptive-interface attacks in VRChat with 30 participants, and a scanner that flags them before entry. Abstract only; no false-positive rate given. <a href="https://arxiv.org/abs/2611.25608">arXiv 2611.25608</a></li>
+      <li><b>Heritage</b> ÇVR (Perry, Roussou and colleagues, <i>Frontiers in Virtual Reality</i>) makes a mutual high-five the gate to progress in a two-person visit to Neolithic Çatalhöyük. 17 pairs, no control condition. <a href="https://www.frontiersin.org/journals/virtual-reality/articles/10.3389/frvir.2026.1901140/full">Paper</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  Compiled by Claude from the linked sources on 24 November 2026. XR industry news was thin in Thanksgiving week, so that section leans on follow-ups and games; Skarredghost and AR Insider could not be opened today. Rumours and second-hand items are labelled as such. Research items are summarised from abstracts, press releases or, where noted, titles; read the papers before citing them.
+</footer>
+
+</div>
+</body>
+</html>

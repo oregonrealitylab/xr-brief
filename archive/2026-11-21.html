@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Prof Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ship's-log column. One narrow reading column; each beat carries its own
+   colour on a left rule and on its chips, so you always know which beat you are in. */
+:root{
+  --paper:#f3f6f8; --card:#ffffff; --ink:#12222e; --muted:#566773; --rule:#d3dce2;
+  --xr:#5a3fd6; --sea:#0b7a75; --lab:#b0600c;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+    --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+  --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit;text-decoration-color:var(--muted);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--xr);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:28px}
+
+header.mast{display:flex;flex-direction:column;gap:6px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+.kicker,.chip,nav a,.beat h2 span,.meta,.src,h3.sub{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.kicker{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;font-weight:600;text-decoration:none;padding:7px 11px;border:1.5px solid currentColor;border-radius:3px}
+nav a.xr{color:var(--xr)} nav a.sea{color:var(--sea)} nav a.lab{color:var(--lab)}
+
+.top{background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.top h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em}
+.top ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.beat{display:flex;flex-direction:column;gap:18px}
+.beat h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.05;margin:0;text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;border-bottom:2px solid var(--c);padding-bottom:6px;color:var(--c)}
+.beat h2 span{font-size:14px;font-weight:600;color:var(--muted)}
+.beat.xr{--c:var(--xr)} .beat.sea{--c:var(--sea)} .beat.lab{--c:var(--lab)}
+
+article{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:7px}
+.chip{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:1px 7px}
+article h3{font-family:var(--body);font-weight:600;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+article p{margin:0;max-width:65ch}
+.why{color:var(--muted);font-size:16px}
+.why b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+.src{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 12px}
+
+h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
+ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
+ul.short li::marker{color:var(--c)}
+
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
+footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
+@media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Daily edition · XR, oceans, interaction research</div>
+  <h1>XR Prof Morning Brief</h1>
+  <div class="meta"><span>Saturday 21 November 2026</span><span>15 minute read</span><span>Covers 19–21 Nov</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a class="xr" href="#xr">XR industry · 6 min</a>
+  <a class="sea" href="#ocean">Marine science · 5 min</a>
+  <a class="lab" href="#research">XR interaction research · 4 min</a>
+</nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
+
+<section class="top" aria-label="Top three">
+  <h2>If you only read three things</h2>
+  <ol>
+    <li>Meta's phone app is dropping its Horizon Worlds feed for some users and putting the VR store first, and app strings suggest (unconfirmed) a rename to "Meta VR".</li>
+    <li>Organic nitrogen falling from the air supplies about 27% of the atmosphere's nitrogen input to the oceans, some 12.8 million tonnes a year, according to a <i>Science</i> study built on 418 samples from 21 cruises.</li>
+    <li>A small exploratory study had 12 professional developers read code in a headset that swaps sections they have already looked at for short AI-written descriptions; they liked the overview and disliked how hard it was to check against the source.</li>
+  </ol>
+</section>
+
+<section class="beat xr" id="xr">
+  <h2>XR industry <span>6 items · 6 min</span></h2>
+
+  <article>
+    <span class="chip">Platform</span>
+    <h3>Meta's phone app pushes Worlds aside, and may become "Meta VR"</h3>
+    <p>UploadVR reports that a new design of the Meta Horizon mobile app is reaching some users. The Worlds-centred feed is gone and the VR store is the landing page. Worlds now sits low in search results or in its own search tab. This follows the split Meta announced at Connect, with Worlds moving mostly to a separate Horizon Create app.</p>
+    <p><b>Datamined, not announced:</b> strings in a November build point to the name "Meta VR", and the same build holds setup videos for the Meta VR Glasses showing a puck to charge, app pairing, and prescription inserts in a Zenni-branded case.</p>
+    <p class="why"><b>Why it matters</b> The companion app is where most Quest owners browse and buy. Making it a store first is the clearest sign yet that Meta now treats VR and Worlds as two products.</p>
+    <div class="src"><a href="https://www.uploadvr.com/meta-begins-removing-worlds-from-the-horizon-mobile-app-may-rebrand-it-as-meta-vr/">UploadVR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>Quest opens a 3D movie store, with licence terms worth reading</h3>
+    <p>Since 19 November, Quest 3 and 3S owners in the US can rent or buy more than 150 3D films in the headset's TV app, including <i>Avatar</i> and <i>Wicked: For Good</i>. The lead title is Billie Eilish's concert film co-directed with James Cameron, exclusive in 3D on Quest until 31 December. Meta lists no prices; Variety, as cited by VR.org, reports about $16.99 to buy and $6.99 to rent.</p>
+    <p>VR.org read the terms. A purchase is a revocable licence to stream, there are no downloads, and Meta owes no replacement if a title is withdrawn. Meta closed film stores on Rift in 2018 and Gear VR in 2020.</p>
+    <p class="why"><b>Why it matters</b> Meta says thousands of titles and international sales arrive with its $1,299.99 VR Glasses in spring 2027. This catalogue is being built for that device.</p>
+    <div class="src"><a href="https://roadtovr.com/rent-buy-3d-movies-on-quest-store-tv/">Road to VR</a><a href="https://vr.org/articles/meta-quest-tv-app-rent-buy-3d-movies-revocable-license-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Supply</span>
+    <h3>Valve says memory costs leave it unable to price its next hardware batch</h3>
+    <p>In a 19 November update, Valve put the 512GB Steam Machine on open sale at $1,049 and closed the waitlist for the 2TB model. It said memory and storage costs are rising so fast that it does not yet know how many more units it can build or at what price, and promised more in January.</p>
+    <p class="why"><b>Why it matters</b> The post does not mention the Steam Frame. The headset uses the same kinds of parts, though, and its 2027 reservation holders are also waiting on a January update.</p>
+    <div class="src"><a href="https://vr.org/articles/steam-machine-512gb-on-sale-2tb-waitlist-closed-memory-costs-steam-frame-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Awards</span>
+    <h3>The Game Awards name five VR/AR nominees</h3>
+    <p>The shortlist is <i>Forefront</i> (Triangle Factory), <i>Into the Radius 2</i> (CM Immersive), <i>Little Nightmares VR: Altered Echoes</i>, <i>Teenage Mutant Ninja Turtles: Empire City</i> and <i>Thief VR: Legacy of Shadow</i>. All five run on Quest and SteamVR, and all but the Turtles game are also on PS VR2. The show is on 10 December. Road to VR notes that its best-scoring game of the year, <i>Hot Dogs, Horseshoes &amp; Hand Grenades 2</i>, is missing.</p>
+    <div class="src"><a href="https://roadtovr.com/game-awards-2026-best-vr-games/">Road to VR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Money</span>
+    <h3>Meta's Black Friday: Quest 3S from $297, glasses up to 25% off</h3>
+    <p>Through 30 November, the 128GB Quest 3S is $296.99 (was $349.99) and the 256GB model $381.99. Ray-Ban Meta Gen 2 drops from $299 to $224.25 and Oakley Meta HSTN from $399 to $299.25. The Meta Ray-Ban Display is excluded.</p>
+    <div class="src"><a href="https://roadtovr.com/meta-quest-3s-black-friday-2026-sale/">Road to VR, Quest</a><a href="https://roadtovr.com/meta-glasses-ray-ban-black-friday-2026-sale/">Road to VR, glasses</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Watchlist</span>
+    <h3>Coming up, and one opinion</h3>
+    <ul class="short">
+      <li><b>10–11 Dec</b> Snap's SPECS: Hack in Brussels, straight after UnitedXR Europe. A hundred developers in teams of five each get a pair of Specs for two days, with up to $100,000 in prizes.</li>
+      <li><b>Opinion</b> Road to VR's Scott Hayden argues the recent wave of PC VR mods for flat games, helped by tools such as UEVR, is a welcome stopgap during a thin release year. He doubts it grows the market, since setup still suits people who already own headsets.</li>
+    </ul>
+    <div class="src"><a href="https://arinsider.co/2026/11/19/specs-hack-extends-snaps-developer-first-playbook/">AR Insider</a><a href="https://roadtovr.com/vr-modding-revolution-savior-or-decay/">Road to VR, modding</a></div>
+  </article>
+</section>
+
+<section class="beat sea" id="ocean">
+  <h2>Marine science <span>5 items + briefs · 5 min</span></h2>
+
+  <article>
+    <span class="chip">Nutrients · Science</span>
+    <h3>A quarter of the air's nitrogen gift to the ocean is organic</h3>
+    <p>A team co-led from HKUST and SUSTech measured organic and inorganic nitrogen directly in 418 marine aerosol samples from 21 cruises, from the tropics to both poles. Fed into a global atmospheric chemistry model, the data give 12.8 million tonnes of organic nitrogen deposited to the oceans each year, about 27% of all atmospheric nitrogen deposition. In nitrogen-poor waters such as the central Atlantic the share is about half.</p>
+    <p>Roughly 70% comes from land, with biomass burning the largest single source at 4.8 million tonnes.</p>
+    <p class="why"><b>Why it matters</b> Wildfire smoke becomes an ocean fertiliser term that models mostly lack. The total is a model estimate with no uncertainty range in the report I read, and the effect on productivity is suggested, not measured.</p>
+    <div class="src"><a href="https://ecomagazine.com/news/research/hkust-study-finds-atmospheric-organic-nitrogen-a-major-ocean-nutrient-source/">ECO Magazine</a><a href="https://doi.org/10.1126/science.aeg4265">Science paper</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Ocean tech</span>
+    <h3>WHOI and JPL unveil a 250 kg robot rated for the deepest trenches</h3>
+    <p>Deep Venture is a modular autonomous vehicle rated to 11,000 m. It does seafloor photogrammetry, carries chemical and biological samplers, and can land on the bottom. In June it dived to about 6,000 m near Bermuda and scouted sites for the crewed sub <i>Alvin</i>; in 2024 it made 13 dives to 5,000 m in the Gulf of Alaska.</p>
+    <p class="why"><b>Why it matters</b> Full-depth access without a large ship is the gap in hadal science. The deepest reported dive is still well short of the rating, and the announcement gives no cost or schedule.</p>
+    <div class="src"><a href="https://ecomagazine.com/news/research/whoi-and-nasa-jpl-launch-deep-venture-auv-for-full-ocean-depth-research/">ECO Magazine / WHOI</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Deep sea · Mining</span>
+    <h3>Metals shaken from nodule sediment damage mussels within four days</h3>
+    <p>Researchers at Ocean University of China agitated nodules and sediment from 5,365 m in the Clarion-Clipperton Zone in seawater, which released metals at 1.8 to 11.6 times control levels. Thick-shell mussels exposed for 96 hours showed stress responses in the gills within a day and, in the digestive gland, a lipid-damage marker up to 6.1 times the control level.</p>
+    <p class="why"><b>Why it matters</b> It arrives two days after the first US Pacific seabed lease sale. The limits are large: a coastal species, at surface temperature and pressure, for four days. The report gives no sample sizes.</p>
+    <div class="src"><a href="https://ecomagazine.com/news/research/deep-sea-mining-sediments-trigger-acute-heavy-metal-toxicity-in-mussels/">ECO Magazine</a><a href="https://doi.org/10.1016/j.wateco.2026.100065">Water &amp; Ecology</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Ecology · Science</span>
+    <h3>Culling seals and sea lions would do little for West Coast salmon</h3>
+    <p>An ecosystem model of the waters off northern California, Oregon and Washington, led by Dylan Gomes, simulated cutting back seals, sea lions, seabirds and other predators. Chinook and coho gained little, because the same predators eat fish that compete with or prey on young salmon. Reducing Pacific hake produced the largest modelled gain, though more hake fishing would raise salmon bycatch.</p>
+    <p class="why"><b>Why it matters</b> Culls are a live policy request in the Pacific Northwest. The authors allow that removing individual animals at river bottlenecks can help. The news report gives no effect sizes.</p>
+    <div class="src"><a href="https://ecomagazine.com/news/fisheries-aquaculture/modeling-study-finds-predator-culls-unlikely-to-restore-pacific-salmon-populations/">ECO Magazine</a><a href="https://doi.org/10.1126/science.aeb1122">Science paper</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Deep sea · Microbes</span>
+    <h3>One tiny-genomed bacterium dominates the skin of sea pigs</h3>
+    <p>A University of Tokyo-led team sequenced tissues from eight deep-sea sea pigs of three species. A single new bacterium, <i>Candidatus</i> Abyssoplasma scotoplanesicola, made up more than 70% of bacterial marker-gene sequences in the body wall. Its genome is 649,000 bases, about a seventh of <i>E. coli</i>'s, and over a quarter of it codes for surface proteins, some more than 5,000 amino acids long.</p>
+    <p class="why"><b>Why it matters</b> Whether the microbe helps or merely lodges is unknown, and eight animals is a small sample.</p>
+    <div class="src"><a href="https://www.sciencedaily.com/releases/2026/11/261118065512.htm">ScienceDaily</a><a href="https://doi.org/10.1093/ismehm/aazag018">ISME Host Microbe</a></div>
+  </article>
+
+  <h3 class="sub">In brief</h3>
+  <ul class="short">
+    <li><b>Symbiosis</b> Reported by Nature World News; I have not read the paper. A shell-less mollusc from South China Sea methane seeps keeps sulfur-oxidising bacteria in "dracospheres", 12-micrometre spheres wrapped in more than 20 membranes (<i>Nature Communications</i>). The proposed function still needs physiological tests. <a href="https://www.natureworldnews.com/articles/73921/20261118/deep-sea-mollusk-survives-oxygen-free-mud-farming-bacteria-inside-tiny-dragonball-compartments.htm">Nature World News</a></li>
+    <li><b>Ice</b> Glaciers that end in lakes lost 66 cm of water equivalent a year, against 40 cm for land-ending and 36 cm for sea-ending glaciers, in a global satellite study in <i>Nature Climate Change</i>. <a href="https://ecomagazine.com/news/coastal/study-finds-glacial-lakes-drive-greater-ice-mass-loss-worldwide/">ECO Magazine</a></li>
+    <li><b>Whales</b> NFWF and NOAA awarded $8.4 million to 16 projects that detect large whales with thermal cameras, hydrophones, satellites and AI, and warn ships in time. <a href="https://ecomagazine.com/news/research/nfwf-and-noaa-award-grants-to-shield-whales-from-vessel-strikes/">ECO Magazine</a></li>
+  </ul>
+</section>
+
+<section class="beat lab" id="research">
+  <h2>XR interaction research <span>4 items · 4 min</span></h2>
+
+  <article>
+    <span class="chip">arXiv · XR + AI</span>
+    <h3>Reading AI-written code in a headset that summarises what you have seen</h3>
+    <p>A quiet weekend for new work, and arXiv again blocked most abstract pages, so this section is short. Zakharov and colleagues first interviewed 13 experts in AI and XR. They then built two XR code-reading prototypes. In one, code fades once you have looked at it (4 developers tried it). In the other, viewed sections are replaced by short descriptions, with head direction deciding when a swap is offered and manual input to accept or undo it (8 developers).</p>
+    <p>Participants said descriptions gave a useful overview of unfamiliar code. They also said comparing a description with its source was hard, and that controls unlike a normal editor added effort.</p>
+    <p class="why"><b>Why it matters</b> These are self-reports from very small groups, submitted to an IUI 2027 workshop. The design rule is still worth borrowing: keep the original one glance away from any AI summary.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.24334">arXiv 2611.24334</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Survey</span>
+    <h3>A map of 163 smart-glasses papers, in four layers</h3>
+    <p>Gao and colleagues survey smart-glasses research from 2020 to October 2026. They sort 163 papers into research resources, sensing and perception, interaction and assistance, and applications. They also catalogue 14 hardware platforms and 10 datasets, and treat energy, latency, privacy and social acceptability as constraints across every layer.</p>
+    <p class="why"><b>Why it matters</b> A ready reading map for a seminar in the term when Android XR glasses reach shops. Abstract only; I have not checked how papers were selected.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.23534">arXiv 2611.23534</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Conference · Dates</span>
+    <h3>IEEE VR first-round decisions arrive in nine days</h3>
+    <p>IEEE VR 2027 sends initial notifications on 30 November. Revised papers are due 31 December and final decisions come on 7 January. The conference runs 27 February to 3 March in Melbourne. CHI resubmissions are due 3 December, so some labs face two revision cycles at once.</p>
+    <div class="src"><a href="https://listserv.uni-tuebingen.de/pipermail/ieee_vis/2026/003316.html">IEEE VR 2027 call for papers</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Reading list</span>
+    <h3>Three to skim</h3>
+    <p>Titles and listing notes only for all three; the abstract pages would not load.</p>
+    <ul class="short">
+      <li><b>Telepresence</b> Effects of locomotion and viewpoint control on immersive robot telepresence for navigation and inspection (Zaman et al.). <a href="https://arxiv.org/abs/2611.23939">arXiv 2611.23939</a></li>
+      <li><b>Surface input</b> TableControl, gesture interaction sensed through surface vibrations (Hettstedt, Erbslöh, Schiele). Accepted as a demo at ACM ISS; a candidate for controller-free input on ordinary desks. <a href="https://arxiv.org/abs/2611.24218">arXiv 2611.24218</a></li>
+      <li><b>Social VR security, update</b> MetaScanner, listed here yesterday, is marked as accepted to <i>Computers &amp; Security</i>. <a href="https://arxiv.org/abs/2611.25608">arXiv 2611.25608</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  Compiled by Claude from the linked sources on 21 November 2026. Reports and rumours are labelled as such. Research items are summarised from titles and abstracts; read the papers before citing them.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Prof Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ship's-log column. One narrow reading column; each beat carries its own
+   colour on a left rule and on its chips, so you always know which beat you are in. */
+:root{
+  --paper:#f3f6f8; --card:#ffffff; --ink:#12222e; --muted:#566773; --rule:#d3dce2;
+  --xr:#5a3fd6; --sea:#0b7a75; --lab:#b0600c;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+    --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+  --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit;text-decoration-color:var(--muted);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--xr);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:28px}
+
+header.mast{display:flex;flex-direction:column;gap:6px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+.kicker,.chip,nav a,.beat h2 span,.meta,.src,h3.sub{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.kicker{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;font-weight:600;text-decoration:none;padding:7px 11px;border:1.5px solid currentColor;border-radius:3px}
+nav a.xr{color:var(--xr)} nav a.sea{color:var(--sea)} nav a.lab{color:var(--lab)}
+
+.top{background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.top h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em}
+.top ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.beat{display:flex;flex-direction:column;gap:18px}
+.beat h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.05;margin:0;text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;border-bottom:2px solid var(--c);padding-bottom:6px;color:var(--c)}
+.beat h2 span{font-size:14px;font-weight:600;color:var(--muted)}
+.beat.xr{--c:var(--xr)} .beat.sea{--c:var(--sea)} .beat.lab{--c:var(--lab)}
+
+article{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:7px}
+.chip{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:1px 7px}
+article h3{font-family:var(--body);font-weight:600;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+article p{margin:0;max-width:65ch}
+.why{color:var(--muted);font-size:16px}
+.why b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+.src{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 12px}
+
+h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
+ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
+ul.short li::marker{color:var(--c)}
+
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
+footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
+@media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Daily edition · XR, oceans, interaction research</div>
+  <h1>XR Prof Morning Brief</h1>
+  <div class="meta"><span>Wednesday 18 November 2026</span><span>15 minute read</span><span>Covers 11–18 Nov</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a class="xr" href="#xr">XR industry · 6 min</a>
+  <a class="sea" href="#ocean">Marine science · 5 min</a>
+  <a class="lab" href="#research">XR interaction research · 4 min</a>
+</nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
+
+<section class="top" aria-label="Top three">
+  <h2>If you only read three things</h2>
+  <ol>
+    <li>Google and Samsung opened pre-orders for their first Android XR glasses, from $395, shipping 10 December. Meta now has a direct competitor in display-free AI eyewear.</li>
+    <li>Two ocean papers landed in <i>Science</i> on 12 November: the first direct recordings of underwater landslides, and 30 years of oxygen data showing the ocean, not the land, is the growing carbon sink.</li>
+    <li>ACM VRST 2026 wraps today in Sendai. Together with the ISMAR 2026 award list, it shows interaction research leaning toward subtle input for glasses and non-visual guidance.</li>
+  </ol>
+</section>
+
+<section class="beat xr" id="xr">
+  <h2>XR industry <span>6 items · 6 min</span></h2>
+
+  <article>
+    <span class="chip">Launch</span>
+    <h3>Google and Samsung put Android XR glasses on sale</h3>
+    <p>Pre-orders opened 12 November through Warby Parker (three styles at $395, US only) and Gentle Monster (six styles from $449, US and South Korea). Deliveries start 10 December. All styles weigh about 41 g, promise up to nine hours of battery, carry a 12 MP camera on Qualcomm's AR1 chip, and work with iPhones as well as Android. There is no display; Gemini is the interface.</p>
+    <p>Google leaned on privacy: bystander faces are redacted before Gemini sees an image, and recording stops if the indicator light is covered. Gentle Monster's first batch reportedly sold out within four days.</p>
+    <p class="why"><b>Why it matters</b> The price and specs sit squarely on Ray-Ban Meta. The contest is now about assistants and frame brands, with consent-by-design as a stated feature.</p>
+    <div class="src"><a href="https://9to5google.com/2026/11/12/google-intelligent-eyewear-glasses/">9to5Google</a><a href="https://www.bloomberg.com/news/articles/2026-11-12/google-samsung-launch-sales-of-smart-glasses-with-warby-parker-gentle-monster">Bloomberg</a><a href="https://roadtovr.com/android-xr-warby-parker-gentle-monster-release-date-price/">Road to VR</a><a href="https://vr.org/vr-release-dates">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Report</span>
+    <h3>Apple's glasses: reveal targeted for WWDC 2027</h3>
+    <p>Bloomberg's Mark Gurman reported on 15 November that Apple plans to announce display-free glasses at WWDC 2027 and ship by the end of that year. The prototype runs a cut-down visionOS on a chip derived from Apple Watch silicon and uses a magnetic three-pin charger. Road to VR separately reports the hardware design is settled and Siri is the centre of the product.</p>
+    <p class="why"><b>Why it matters</b> These are reports, not announcements, and the timing can slip. If accurate, all three major platform owners will have camera glasses within about a year.</p>
+    <div class="src"><a href="https://skarredghost.com/2026/11/17/samsung-apple-smartglasses/">The Ghost Howls</a><a href="https://roadtovr.com/apple-finalizes-smart-glasses-siri-support-report/">Road to VR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Platform</span>
+    <h3>Apple tells developers it is staying with visionOS</h3>
+    <p>At a "Meet with Apple" session for immersive video creators, a Spatial Computing product manager said the company remains very committed to the platform. Road to VR notes the pledge is to visionOS, which could run on future glasses, rather than to Vision Pro hardware. Analyst Ming-Chi Kuo has reportedly put a second Vision Pro at late 2028 or later; Apple has not confirmed that. Blackmagic announced an ambisonic microphone for immersive capture at the same event.</p>
+    <div class="src"><a href="https://roadtovr.com/apple-still-committed-visionos-platform-vision-pro/">Road to VR</a><a href="https://roadtovr.com/blackmagic-ambisonic-mic-vision-pro/">Blackmagic mic</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Money</span>
+    <h3>Meta commits more than $120M to third-party games</h3>
+    <p>The funding comes ahead of the Meta VR Glasses launch. Meta also shared store data: Quest revenue for January to September was flat year over year, each of the top 50 apps cleared $1M after fees, and in-app purchases now bring in more than paid downloads.</p>
+    <p class="why"><b>Why it matters</b> Flat revenue plus a shift to in-app spending is the clearest public read on the health of the standalone VR market this year.</p>
+    <div class="src"><a href="https://roadtovr.com/meta-commits-120m-vr-glasses-games/">Road to VR</a><a href="https://skarredghost.com/2026/11/17/samsung-apple-smartglasses/">The Ghost Howls</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>3D films reach Quest; a hardcore roguelike gets strong reviews</h3>
+    <p>Disney+ turned on 3D movies for Quest 3 and 3S. <i>Hot Dogs, Horseshoes &amp; Hand Grenades 2</i> arrived on Quest on 12 November at $39.99 and drew praise despite a steep learning curve. <i>Beat Saber</i> added seven free tracks, and <i>Siege of Heaven</i> became a standalone $11.99 game.</p>
+    <div class="src"><a href="https://vr.org/articles/this-week-in-vr-2026-11-13">VR.org</a><a href="https://roadtovr.com/hot-dogs-horsehoes-2-review-quest-steam-vr/">Road to VR review</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Watchlist</span>
+    <h3>Coming up</h3>
+    <ul class="short">
+      <li><b>10 Dec</b> Android XR glasses reach stores.</li>
+      <li><b>December</b> Pico Space Pro headset expected, after its September event was cancelled.</li>
+      <li><b>2027</b> Xreal Aura, Android XR glasses with a 70 degree field of view, per a Road to VR hands-on.</li>
+      <li><b>Q1 2027</b> Subvocal's lip-reading glasses for silent AI queries, $499 early price. The Ghost Howls expects delays.</li>
+      <li><b>World models</b> Google DeepMind announced Genie 4 on 11 November. One industry analysis argues streamed, stereoscopic world models for VR are unlikely to be practical before 2030.</li>
+    </ul>
+    <div class="src"><a href="https://skarredghost.com/2026/11/10/samsung-glasses-pico-space-pro/">The Ghost Howls, 10 Nov</a><a href="https://roadtovr.com/">Road to VR</a><a href="https://www.auganix.org/">Auganix</a></div>
+  </article>
+</section>
+
+<section class="beat sea" id="ocean">
+  <h2>Marine science <span>4 items + briefs · 5 min</span></h2>
+
+  <article>
+    <span class="chip">Geology · Science</span>
+    <h3>Underwater landslides recorded as they happen</h3>
+    <p>Sonar arrays and a seafloor mooring at the Homathko Delta in Bute Inlet, British Columbia, picked up about 30 fully submerged landslides in 18 days, three of them in fine detail. The sandy seabed fails slowly, over minutes to hours, in a process called breaching, and then feeds flows that run kilometres down a 50 km channel. MBARI and Durham University led the work with ten institutions.</p>
+    <p class="why"><b>Why it matters</b> Breaching may need different hazard planning for cables, pipelines and shorelines than sudden slope collapse, and it moves carbon and pollutants offshore routinely.</p>
+    <div class="src"><a href="https://www.noc.ac.uk/news/scientists-capture-first-direct-observations-underwater-landslides">National Oceanography Centre</a><span>Englert et al., Science, 12 Nov</span></div>
+  </article>
+
+  <article>
+    <span class="chip">Carbon · Science</span>
+    <h3>The ocean is taking a growing share of fossil carbon; land has stalled</h3>
+    <p>Scripps researchers used more than 30 years of paired atmospheric oxygen and CO<sub>2</sub> records to separate the two sinks. The ocean absorbed about 2.8 billion tonnes of carbon a year from 1990 to 2019, roughly 35% of fossil emissions, and that uptake has been rising. Net land uptake peaked around 2009 and has not kept pace.</p>
+    <p class="why"><b>Why it matters</b> Most models expected land uptake to grow with CO<sub>2</sub>. An independent, measurement-based check says it has not, which puts more weight on an ocean sink the authors say may also slow.</p>
+    <div class="src"><a href="https://www.eurekalert.org/news-releases/1151751">Scripps release</a><a href="https://phys.org/news/2026-11-ocean-absorbs-fossil-fuel-carbon.html">Phys.org</a><span>Morgan et al., Science, 12 Nov</span></div>
+  </article>
+
+  <article>
+    <span class="chip">Deep sea · Sci Reports</span>
+    <h3>Seabed mining nodules are habitats on the inside too</h3>
+    <p>A MARUM team in Bremen opened 244 polymetallic nodules from the Clarion-Clipperton Zone and counted 4,139 small animals living in the cracks, 17 per nodule on average and 245 in the busiest one. The communities differ from those in the surrounding mud and look alike across sites up to 1,000 km apart.</p>
+    <p class="why"><b>Why it matters</b> Nodules grow a few millimetres per million years. Mining them for nickel, cobalt and copper would remove a habitat that cannot regrow on any human timescale.</p>
+    <div class="src"><a href="https://www.sciencedaily.com/releases/2026/11/261114202133.htm">ScienceDaily</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Climate · NASA</span>
+    <h3>This El Niño is tracking the 1997 giant</h3>
+    <p>Sentinel-6 sea-level maps from 12 October closely match TOPEX/Poseidon's from October 1997, with warm water piled along the equator toward South America. NOAA's October outlook gave an 83% chance of strong to very strong conditions for January to March 2027. A repeat of 1997–98 would mean a wet, flood-prone winter for California and the southern US, though JPL scientists stress the comparison is a best guess.</p>
+    <div class="src"><a href="https://www.sciencedaily.com/releases/2026/11/261114202227.htm">ScienceDaily / NASA Earth Observatory</a><a href="https://www.noc.ac.uk/news/noc-scientists-contribute-expert-briefing-rapidly-strengthening-el-nino">NOC briefing</a></div>
+  </article>
+
+  <h3 class="sub">In brief</h3>
+  <ul class="short">
+    <li><b>Currents</b> Model simulations in <i>Nature Geoscience</i> (17 Nov) link Gulf Stream swings to Kuroshio Extension warming through the Arctic atmosphere, accounting for 13% of internal variability. <a href="https://www.nature.com/subjects/physical-oceanography">Nature</a></li>
+    <li><b>Sensing</b> UK researchers are studying how seabed telecom cables interact with sediment, a step toward using existing fibre routes as an ocean observing network. <a href="https://www.noc.ac.uk/news/new-research-undersea-cables-and-their-interactions-seabed-could-pave-way-self-aware-ocean">NOC</a></li>
+    <li><b>Robotics</b> The AUV Ran II will survey beneath Antarctic ice shelves in a new ERC-funded stability study. <a href="https://ecomagazine.com/">ECO Magazine</a></li>
+    <li><b>Policy</b> Ocean scientists, including a UC San Diego delegation, are at COP31 in Antalya. <a href="https://scripps.ucsd.edu/news/archives">Scripps</a></li>
+  </ul>
+</section>
+
+<section class="beat lab" id="research">
+  <h2>XR interaction research <span>4 items · 4 min</span></h2>
+
+  <article>
+    <span class="chip">Conference · live</span>
+    <h3>ACM VRST 2026 closes today in Sendai</h3>
+    <p>The 32nd Symposium on Virtual Reality Software and Technology ran 16–18 November at Tohoku University. Papers go into the ACM Digital Library; the brief will pick up awards and standout papers as they are posted.</p>
+    <div class="src"><a href="https://sigchi.org/events/vrst-2026/">SIGCHI</a><a href="https://vrst.acm.org/vrst2026/">VRST 2026</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Awards · ISMAR 2026</span>
+    <h3>What the ISMAR best-paper list says about the field</h3>
+    <p>Eight papers took best-paper awards in Bari last month. Grouped by theme, from titles and abstracts:</p>
+    <ul class="short">
+      <li><b>Guidance beyond vision</b> A forearm vibrotactile band that adapts direction cues to arm posture for VR navigation, and a wayfinding study whose title states the result: actionable guidance beats map and compass cues.</li>
+      <li><b>Subtle input</b> One Finger Warrior, a thumb-to-index technique for mobile use. This is the kind of input display-free and small-display glasses need.</li>
+      <li><b>Other senses</b> Smell as a context cue to carry procedural skills from mixed-reality training to real tasks, and hand-outline visuals that share felt roughness between VR collaborators.</li>
+      <li><b>Wellbeing</b> CyberSelf, embodied self-distancing for emotional support in VR.</li>
+    </ul>
+    <p class="why"><b>Also recognised</b> Honourable mentions include vergence-accommodation conflict in gaze-based 3D selection, how VR systems affect virtual navigation for blind people, and pinch versus point poses for drawing.</p>
+    <div class="src"><a href="https://www.ieeeismar.net/2026/awards/">ISMAR 2026 awards</a><a href="https://www.computer.org/csdl/proceedings/ismar/2026/2lh4dp4ztdu">Proceedings</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Thread · AI + XR</span>
+    <h3>Language models are becoming part of the interaction loop</h3>
+    <p>A Cambridge group's ISMAR paper handles open-ended gesture and voice commands in 3D by generating code at runtime instead of matching a fixed command set. ISMAR also hosted a first workshop on AI-mediated heads-up interaction for wearable mixed reality, framed around deciding when and how glasses should speak up.</p>
+    <p class="why"><b>Why it matters</b> This is the research side of this week's product news. Glasses with no display leave timing, modality and interruption as the main design questions.</p>
+    <div class="src"><a href="http://pokristensson.com/publications.html">Kristensson publications</a><a href="https://easychair.org/cfp/AHIMR26">AHIMR'26 workshop</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Reading list</span>
+    <h3>Three recent papers to skim</h3>
+    <ul class="short">
+      <li><b>Adaptive XR for robot teleoperation</b> A within-participant pick-and-place study comparing fixed AR, augmented virtuality and VR against a mode that moves along the reality-virtuality continuum. <a href="https://arxiv.org/abs/2609.31138">arXiv 2609.31138</a></li>
+      <li><b>Switched Reading</b> Tohoku University techniques for handing text between visual and audio presentation on AR glasses when eyes are needed elsewhere, tested with 16 participants. <a href="https://arxiv.org/abs/2608.06985">arXiv 2608.06985</a></li>
+      <li><b>PC vs VR vs MR for training</b> A controlled comparison in esports production training concludes the right modality depends on the task. <a href="https://www.frontiersin.org/journals/virtual-reality/articles/10.3389/frvir.2026.1856354/full">Frontiers in Virtual Reality</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  Compiled by Claude from the linked sources on 18 November 2026. Reports and rumours are labelled as such. Research items are summarised from titles and abstracts; read the papers before citing them.
+</footer>
+
+</div>
+</body>
+</html>

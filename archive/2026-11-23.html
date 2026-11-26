@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Prof Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ship's-log column. One narrow reading column; each beat carries its own
+   colour on a left rule and on its chips, so you always know which beat you are in. */
+:root{
+  --paper:#f3f6f8; --card:#ffffff; --ink:#12222e; --muted:#566773; --rule:#d3dce2;
+  --xr:#5a3fd6; --sea:#0b7a75; --lab:#b0600c;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+    --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+  --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit;text-decoration-color:var(--muted);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--xr);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:28px}
+
+header.mast{display:flex;flex-direction:column;gap:6px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+.kicker,.chip,nav a,.beat h2 span,.meta,.src,h3.sub{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.kicker{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;font-weight:600;text-decoration:none;padding:7px 11px;border:1.5px solid currentColor;border-radius:3px}
+nav a.xr{color:var(--xr)} nav a.sea{color:var(--sea)} nav a.lab{color:var(--lab)}
+
+.top{background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.top h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em}
+.top ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.beat{display:flex;flex-direction:column;gap:18px}
+.beat h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.05;margin:0;text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;border-bottom:2px solid var(--c);padding-bottom:6px;color:var(--c)}
+.beat h2 span{font-size:14px;font-weight:600;color:var(--muted)}
+.beat.xr{--c:var(--xr)} .beat.sea{--c:var(--sea)} .beat.lab{--c:var(--lab)}
+
+article{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:7px}
+.chip{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:1px 7px}
+article h3{font-family:var(--body);font-weight:600;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+article p{margin:0;max-width:65ch}
+.why{color:var(--muted);font-size:16px}
+.why b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+.src{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 12px}
+
+h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
+ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
+ul.short li::marker{color:var(--c)}
+
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
+footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
+@media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Daily edition · XR, oceans, interaction research</div>
+  <h1>XR Prof Morning Brief</h1>
+  <div class="meta"><span>Monday 23 November 2026</span><span>15 minute read</span><span>Covers 20–23 Nov</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a class="xr" href="#xr">XR industry · 6 min</a>
+  <a class="sea" href="#ocean">Marine science · 5 min</a>
+  <a class="lab" href="#research">XR interaction research · 4 min</a>
+</nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
+
+<section class="top" aria-label="Top three">
+  <h2>If you only read three things</h2>
+  <ol>
+    <li>Meta's $1M hands-only developer competition has closed, with winners due around 11 December; one entrant says many demos are casual mini-games built on year-old tooling.</li>
+    <li>The North Pacific oxygen minimum zone grew and shrank in step with Atlantic overturning for 55,000 years, which sits awkwardly beside last week's finding that its southern edge barely moved (<i>Nature Geoscience</i>).</li>
+    <li>When a virtual human passes between an AI agent and a person mid-conversation, users keep believing whoever was announced at the start (Zhang and Steed, 24 participants).</li>
+  </ol>
+</section>
+
+<section class="beat xr" id="xr">
+  <h2>XR industry <span>5 items · 6 min</span></h2>
+
+  <article>
+    <span class="chip">Money · Platform</span>
+    <h3>Meta's $1M hands-only competition closes; winners around 11 December</h3>
+    <p>A quiet day: the trade sites published almost nothing over the weekend, and Black Friday deals fill the feeds. Submissions to Meta's second Start developer competition closed on 18 November. It offers $1M as 20 awards of $20,000 to $100,000 across entertainment, gaming and productivity. Entries must work with hands alone from start to finish, ideally seated, and satisfy within about ten minutes.</p>
+    <p>In today's weekly roundup, Skarredghost, whose team entered, says many strong demos have appeared on social media. He also finds many of them casual mini-games, and the tooling unchanged from a year ago. That is one participant's opinion.</p>
+    <p class="why"><b>Why it matters</b> The brief describes the content Meta wants for its VR Glasses: controller-free, seated and short. The winners list will show how far hand tracking alone can carry an app.</p>
+    <div class="src"><a href="https://developers.meta.com/horizon/blog/meta-connect-2026-vr-start-developer-competition/">Meta developer blog</a><a href="https://skarredghost.com/2026/11/23/steam-machine-vr/">Skarredghost roundup</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Thread</span>
+    <h3>The PC VR mod debate gets a rebuttal</h3>
+    <p>Friday's Road to VR opinion piece argued that flatscreen-to-VR mods serve existing owners without growing the market. VR.org answered on Saturday: PC gaming's biggest titles began as mods, and on 21 November Counter-Strike 2 had about 1.06 million concurrent players and Dota 2 about 753,000. The author adds that Half-Life 2: VR Mod holds 97% positive from 5,583 English reviews. He locates the real risk in publishers' lawyers, citing Take-Two's 2022 takedown of Luke Ross's mods.</p>
+    <p class="why"><b>Why it matters</b> Read together, the two pieces make a seminar on what sustains a platform's content. Both are opinion, and the figures are the authors' own.</p>
+    <div class="src"><a href="https://roadtovr.com/vr-modding-revolution-savior-or-decay/">Road to VR</a><a href="https://vr.org/articles/counter-strike-was-a-mod-vr-mod-boom-not-sign-of-decay-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>A 2001 god game now has two VR mods</h3>
+    <p>An open-source OpenXR mod for <i>Black &amp; White</i> reached version 1.3.0 on 21 November, adding a spell book on the left hand, a fly mode, comfort options and an experimental Steam Frame add-on. A second mod uses SteamVR and, per VR.org, has no published source or licence. Both need the original game, which is no longer sold, and neither installer is code-signed. VR.org's writer did not run them, and it is my only source.</p>
+    <div class="src"><a href="https://vr.org/articles/black-and-white-vr-mod-1-3-spell-book-two-mods-old-cd-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>PullFit pairs hand tracking with resistance bands</h3>
+    <p>PullFit, a $9.99 Early Access fitness app for Quest by solo developer James Hough, uses hand tracking only, with resistance bands as the equipment. A 2D stick-figure mirror or a 3D holographic partner demonstrates the form. Two people can train together in one room or online, and up to eight can pass the headset around. UploadVR's reviewer used it for six weeks on a complimentary key.</p>
+    <p class="why"><b>Why it matters</b> A cheap physical prop supplies the resistance that hand tracking cannot. That pattern suits a student project.</p>
+    <div class="src"><a href="https://www.uploadvr.com/pullfit-brings-resistance-training-to-quest-in-early-access/">UploadVR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Watchlist</span>
+    <h3>Dates for the next three weeks</h3>
+    <ul class="short">
+      <li><b>25 and 27 Nov</b> Two releases, per UploadVR's November list (last updated 6 November): <i>Sunstone of Time</i> on PC VR and Quest, then <i>Div Zero</i> on PC VR.</li>
+      <li><b>26 Nov</b> Steam's Black Friday discounts open at 10 AM Pacific, per VR.org's weekly roundup.</li>
+      <li><b>30 Nov</b> Meta's Quest 3S and glasses sale ends.</li>
+      <li><b>Around 11 Dec</b> Meta names the Start competition winners, a day after Android XR glasses go on general sale.</li>
+      <li><b>Second-hand</b> Skarredghost's roundup mentions an NYPD video of officers training on Quest 3 and hands-on photos of Sharp's Xrostella VR1. I did not see either at its source.</li>
+    </ul>
+    <div class="src"><a href="https://vr.org/articles/this-week-in-vr-2026-11-20">VR.org weekly roundup</a><a href="https://skarredghost.com/2026/11/23/steam-machine-vr/">Skarredghost roundup</a></div>
+  </article>
+</section>
+
+<section class="beat sea" id="ocean">
+  <h2>Marine science <span>4 items + briefs · 5 min</span></h2>
+
+  <article>
+    <span class="chip">Oxygen · Paleo</span>
+    <h3>The North Pacific's low-oxygen zone followed the Atlantic's lead</h3>
+    <p>A reconstruction published today uses 2,569 counts of seafloor foraminifera from 11 sediment cores across the subarctic and eastern North Pacific. Over 55,000 years the oxygen minimum zone expanded during abrupt northern warm events, roughly doubling from about 3,000 km to at least 6,000 km. It shrank to 1,000 to 2,000 km when Atlantic overturning weakened. The Pacific lagged by a few centuries at most, and an Earth-system model reproduces the link.</p>
+    <p class="why"><b>Why it matters</b> Yesterday's item, from nitrogen isotopes in one core at the zone's southern margin, found almost no glacial change. The two studies use different proxies, places and timescales, so they need not conflict, but the question is open. Oxygen estimates here carry about ±45% error, and the model forcing is idealised.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s41561-026-02122-x">Nature Geoscience (open access)</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Geology</span>
+    <h3>Mediterranean dead-water layers tied to Atlantic rain as well as the Nile</h3>
+    <p>Sapropels are dark, organic-rich layers laid down when the deep Mediterranean lost its oxygen. The usual explanation is monsoon-fed Nile floods. A sediment-chemistry proxy for winter rainfall at an ocean drilling site off south-west Iberia, compared with western Mediterranean surface salinity over 350,000 years, shows low-salinity events and sapropels coinciding with wetter Iberian winters. The authors conclude that moisture carried in from the Atlantic also drove the basin's salinity and deep ventilation.</p>
+    <p class="why"><b>Why it matters</b> It amends a textbook mechanism. The Atlantic signal rests on one core and an indirect proxy, and the proposed link to a North Atlantic Oscillation-like pattern is tentative. I read the abstract and methods preview only.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s41561-026-02141-8">Nature Geoscience</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Climate · Coasts</span>
+    <h3>Later freeze-up means more extreme waves at Canada's northernmost community</h3>
+    <p>Researchers from Université du Québec à Rimouski, with co-authors from Ausuittuq (Grise Fiord), Nunavut, split extreme water levels there into tide, surge and wave runup. Runup supplies about 30% of annual maximum water levels and directly drives a quarter of extreme events. With CMIP6 wind and sea-ice projections and a locally calibrated wave model, extreme wave events become 41% more frequent by mid-century under a middle emissions scenario and 62% under a high one, relative to 1985 to 2000.</p>
+    <p class="why"><b>Why it matters</b> It puts a local number on an Arctic hazard usually described in general terms. One site, a simplified wave model, and an early-release paper whose abstract gives no uncertainty ranges.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s43247-026-04146-y">Communications Earth &amp; Environment</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Corals · Climate</span>
+    <h3>Deep reefs offer little shelter from marine heatwaves</h3>
+    <p>This one is from 10 November. It fills a gap on a quiet day: NOC, Scripps and MBARI posted nothing new this weekend. Simulated daily temperatures for 1993 to 2023, down to 150 m, show heatwaves covering more than half of tropical reef area in 8 of the 13 years since 2010. At 90 to 150 m they lasted 15 days or more in all but two years, at about 2 °C above normal.</p>
+    <p class="why"><b>Why it matters</b> The idea that deep reefs can reseed damaged shallow ones assumes the deep stays cool. These are modelled temperatures, not instrument records, and the study includes no bleaching observations.</p>
+    <div class="src"><a href="https://news.agu.org/press-release/deep-reefs-provide-corals-little-refuge-from-extreme-ocean-heat/">AGU release</a><a href="https://doi.org/10.1029/2026GL123865">Geophysical Research Letters</a></div>
+  </article>
+
+  <h3 class="sub">In brief</h3>
+  <ul class="short">
+    <li><b>Policy</b> A commentary in <i>Nexus</i> led by Richard Unsworth argues that healthy seas should be funded as national infrastructure and judged by measured recovery, not hectares protected. Opinion, with no new data. <a href="https://sciencesources.eurekalert.org/news-releases/1152617">Release</a></li>
+    <li><b>Heat</b> "Subsurface marine heat surge produces delayed climate impacts in the North Pacific" appeared in <i>Communications Earth &amp; Environment</i> on 20 November. Title only; the page would not load. <a href="https://www.nature.com/articles/s43247-026-04223-2">Paper</a></li>
+  </ul>
+</section>
+
+<section class="beat lab" id="research">
+  <h2>XR interaction research <span>5 items · 4 min</span></h2>
+
+  <article>
+    <span class="chip">arXiv · Social XR</span>
+    <h3>Users keep believing whoever was announced first</h3>
+    <p>Zhang and Steed (UCL) asked whether people notice when a virtual human passes between an AI agent and a human-driven avatar mid-conversation. In a within-subject VR study, 24 participants interviewed a virtual human under four conditions, then rated who was in control, moment by moment, while reviewing recordings. Perceived agency followed the controller disclosed at the start and did not clearly update after a handover. Co-presence and likeability were higher when the human took over later.</p>
+    <p class="why"><b>Why it matters</b> If first impressions anchor, a single disclosure at the start of a hybrid session will mislead. The sample is small, the interview had five scripted questions, and the agent's replies were pre-recorded, not a live language model.</p>
+    <div class="src"><a href="https://arxiv.org/pdf/2611.12529">arXiv 2611.12529</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Accessibility</span>
+    <h3>AdaptType fits VR text entry to each user's abilities</h3>
+    <p>Kong and colleagues, with Jacob Wobbrock, built a multimodal system for people with upper-body motor impairments. Users configure input techniques from ability-based recommendations and fix errors by voice. With 10 participants, customised techniques beat gaze-only and hand-only baselines. Voice correction cut the failure rate from 15.1% to 2.0%, and the abstract reports 36.26 words per minute at a 0.36% error rate.</p>
+    <p class="why"><b>Why it matters</b> Ability-based design has rarely been applied to VR typing. Ten participants, and the abstract does not say which configuration produced the headline speed.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.19096">arXiv 2611.19096</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Safety</span>
+    <h3>A thickening fog in place of the grid boundary</h3>
+    <p>Degenhard and colleagues at Ulm replaced the play-area grid with particles that thicken near the edge. In a within-subjects study with 11 people, reaction distance matched Meta's Guardian grid (0.15 m against 0.14 m). Presence was higher, and seven preferred the particles. The Unity code is open source, and the paper is headed for MUM '26 in Glasgow next week.</p>
+    <p class="why"><b>Why it matters</b> It is a boundary cue that belongs to the scene and can be reused. The authors acknowledge a confound: the particles appeared earlier and stayed visible about three times as long as the grid.</p>
+    <div class="src"><a href="https://arxiv.org/html/2611.15561">arXiv 2611.15561</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Conference · ISS</span>
+    <h3>ISS in Turin: a multisensory keynote and an award for skin input</h3>
+    <p>Today is workshops and the doctoral symposium. Tomorrow at 09:30 CET, Marianna Obrist (UCL) gives the keynote on bringing touch, taste and smell into XR. The 10-Year Impact Award goes to TapSkin (Zhang et al., 2016), which treated the skin around a smartwatch as an input surface. Wednesday has a session on XR windows and gaze and another on language models and authoring. Best papers are named on Thursday.</p>
+    <p class="why"><b>Why it matters</b> Titles only for most talks. Some papers on the programme appeared in the ACM's HCI journal a year ago, so they are new as talks, not as papers.</p>
+    <div class="src"><a href="https://iss.acm.org/2026/program">ISS 2026 programme</a><a href="https://iss.acm.org/2026/program/10_years_impact_award">Impact award</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Reading list</span>
+    <h3>Three to skim</h3>
+    <ul class="short">
+      <li><b>LLM + 3D editing</b> Chen, Kristensson and colleagues (ISS, Wednesday): in a speech-driven VR geometry editor, clarification questions plus previews anchored in space needed about 8 conversation rounds, against 12 for questions alone. 24 participants; peak task performance did not differ. <a href="https://arxiv.org/pdf/2607.23201">arXiv 2607.23201</a></li>
+      <li><b>Cross-device MR</b> MRxD (Zhan et al.) distils 238 papers on mixed reality used alongside other devices into three dimensions and six usage patterns. Validated only in a six-person workshop. <a href="https://arxiv.org/abs/2611.16171">arXiv 2611.16171</a></li>
+      <li><b>Group ideation</b> Shaer and colleagues compared 14 triads brainstorming with AI on a flat canvas and in VR. VR gave more balanced roles but weaker group coherence. The two platforms differed in many ways at once. <a href="https://arxiv.org/abs/2611.21125">arXiv 2611.21125</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  Compiled by Claude from the linked sources on 23 November 2026. It was a quiet day after a quiet weekend, so some sections run short and one marine item dates from 10 November. Reports and second-hand items are labelled as such. Research items are summarised from titles and abstracts; read the papers before citing them.
+</footer>
+
+</div>
+</body>
+</html>

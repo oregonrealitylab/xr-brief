@@ -65,6 +65,8 @@ h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
 ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
 ul.short li::marker{color:var(--c)}
 
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
 footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
 @media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
 </style>
@@ -83,6 +85,30 @@ footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font
   <a class="sea" href="#ocean">Marine science · 5 min</a>
   <a class="lab" href="#research">XR interaction research · 4 min</a>
 </nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
 
 <section class="top" aria-label="Top three">
   <h2>If you only read three things</h2>

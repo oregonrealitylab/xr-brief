@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Prof Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a ship's-log column. One narrow reading column; each beat carries its own
+   colour on a left rule and on its chips, so you always know which beat you are in. */
+:root{
+  --paper:#f3f6f8; --card:#ffffff; --ink:#12222e; --muted:#566773; --rule:#d3dce2;
+  --xr:#5a3fd6; --sea:#0b7a75; --lab:#b0600c;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+    --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0d171e; --card:#15232c; --ink:#e6eef2; --muted:#9db0bb; --rule:#2a3c47;
+  --xr:#a897ff; --sea:#4fc9c1; --lab:#f0a650;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit;text-decoration-color:var(--muted);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--xr);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:28px}
+
+header.mast{display:flex;flex-direction:column;gap:6px;border-bottom:3px solid var(--ink);padding-bottom:14px}
+.kicker,.chip,nav a,.beat h2 span,.meta,.src,h3.sub{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.kicker{font-size:14px;font-weight:600;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:44px;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;font-weight:600;text-decoration:none;padding:7px 11px;border:1.5px solid currentColor;border-radius:3px}
+nav a.xr{color:var(--xr)} nav a.sea{color:var(--sea)} nav a.lab{color:var(--lab)}
+
+.top{background:var(--card);border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.top h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em}
+.top ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+
+.beat{display:flex;flex-direction:column;gap:18px}
+.beat h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.05;margin:0;text-transform:uppercase;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;border-bottom:2px solid var(--c);padding-bottom:6px;color:var(--c)}
+.beat h2 span{font-size:14px;font-weight:600;color:var(--muted)}
+.beat.xr{--c:var(--xr)} .beat.sea{--c:var(--sea)} .beat.lab{--c:var(--lab)}
+
+article{border-left:3px solid var(--c);padding-left:14px;display:flex;flex-direction:column;gap:7px}
+.chip{align-self:flex-start;font-size:12.5px;font-weight:700;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:1px 7px}
+article h3{font-family:var(--body);font-weight:600;font-size:20px;line-height:1.25;margin:0;text-wrap:balance}
+article p{margin:0;max-width:65ch}
+.why{color:var(--muted);font-size:16px}
+.why b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+.src{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 12px}
+
+h3.sub{font-size:16px;font-weight:700;margin:4px 0 -8px;color:var(--muted)}
+ul.short{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px;max-width:65ch}
+ul.short li::marker{color:var(--c)}
+
+.editions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px;font-weight:600;color:var(--muted)}
+.editions select{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:7px 9px;min-height:38px;max-width:100%}
+footer{border-top:1px solid var(--rule);padding-top:14px;color:var(--muted);font-size:15px}
+@media (max-width:420px){h1{font-size:36px} body{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Daily edition · XR, oceans, interaction research</div>
+  <h1>XR Prof Morning Brief</h1>
+  <div class="meta"><span>Sunday 22 November 2026</span><span>15 minute read</span><span>Covers 19–21 Nov</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a class="xr" href="#xr">XR industry · 6 min</a>
+  <a class="sea" href="#ocean">Marine science · 5 min</a>
+  <a class="lab" href="#research">XR interaction research · 4 min</a>
+</nav>
+
+<div class="editions" id="editions"><a href="https://xrbrief.xrprof.org/">Past editions</a></div>
+<script>
+/* Edition menu: lists up to 30 past editions from editions.json on the website. Keep this block unchanged between editions. */
+(function(){
+  var site='https://xrbrief.xrprof.org/', onSite=location.hostname==='xrbrief.xrprof.org', base=onSite?'/':site;
+  var m=location.pathname.match(/archive\/(\d{4}-\d{2}-\d{2})\.html$/), here=m?m[1]:null;
+  function label(d){return new Date(d+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+  fetch(base+'editions.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
+    list=(Array.isArray(list)?list:[]).filter(function(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)}).slice(0,30);
+    if(!list.length)return;
+    var box=document.getElementById('editions'), lab=document.createElement('label'), sel=document.createElement('select');
+    lab.htmlFor='edition'; lab.textContent='Edition'; sel.id='edition';
+    list.forEach(function(d,i){var o=document.createElement('option');o.value=d;o.textContent=label(d)+(i===0?' · latest':'');sel.appendChild(o)});
+    var current=here&&list.indexOf(here)>-1?here:list[0]; sel.value=current;
+    sel.addEventListener('change',function(){
+      var url=sel.value===list[0]?base:base+'archive/'+sel.value+'.html';
+      if(onSite){location.href=url}else{window.open(url,'_blank','noopener');sel.value=current}
+    });
+    window.addEventListener('pageshow',function(){sel.value=current});
+    box.textContent=''; box.appendChild(lab); box.appendChild(sel);
+  }).catch(function(){});
+})();
+</script>
+
+<section class="top" aria-label="Top three">
+  <h2>If you only read three things</h2>
+  <ol>
+    <li>A SteamVR beta lets PC VR games punch a chroma-key window into the real room on Quest over Steam Link, a week after Valve's own Steam Frame got the same option.</li>
+    <li>ICESat-2 tracking of more than 15,000 Antarctic ice cliffs found few tall enough for runaway collapse, and the tallest ones retreated in short bursts, not continuously (<i>Science</i>).</li>
+    <li>VRST 2026 gave its best paper awards to SpatialSlides, which joins presentation software to XR, and to a study of how sharing your surroundings affects social presence in remote XR.</li>
+  </ol>
+</section>
+
+<section class="beat xr" id="xr">
+  <h2>XR industry <span>6 items · 6 min</span></h2>
+
+  <article>
+    <span class="chip">Platform</span>
+    <h3>SteamVR beta brings chroma-key passthrough to Quest over Steam Link</h3>
+    <p>A quiet weekend: nothing new was published today, and most of what follows is from 19 to 21 November. The SteamVR 2.19.4 beta adds chroma-key support for Room View when streaming to a Quest. Wherever a game draws the key colour, the headset's camera feed shows through. The Steam Frame got the same option on 13 November.</p>
+    <p>The settings offer two modes, "Key Content" and "Protect Content". VR.org, which read Valve's notes but has not tested the build, says Valve does not explain the second mode, name the key colour, or list supported Quest models.</p>
+    <p class="why"><b>Why it matters</b> Chroma key is a cheap route to mixed reality for PC VR titles, since a developer only has to paint a colour. Valve is also keeping Quest close to parity with its own headset.</p>
+    <div class="src"><a href="https://vr.org/articles/steamvr-2-19-4-beta-steam-link-quest-chroma-key-room-view-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Money</span>
+    <h3>Pico's $50,000 contest pays double for native Android apps built with AI agents</h3>
+    <p>The PICO Space Program "Build with AI" competition offers $50,000 across 32 cash prizes for spatial apps for PICO OS 6 written with AI coding agents. The native Android/Kotlin track pays $10,000 and $5,000 at the top, against $5,000 and $2,000 for Unity. Registration closes 1 February 2027, and entrants can work in the emulator without a headset.</p>
+    <p>VR.org read the rules and reports that XR Bootcamp GmbH is the sole sponsor and administrator, with Pico as brand and hardware partner. <b>Report, not confirmed by Pico:</b> the same article says the setup documents refer to a "PICO Space Pro (Project Swan)" slated for 2 December.</p>
+    <p class="why"><b>Why it matters</b> The prize weighting shows where Pico wants developers to go, which is away from game engines. It is also a ready assignment brief for an XR development course.</p>
+    <div class="src"><a href="https://www.auganix.org/xr-news-pico-build-with-ai-competition/">Auganix</a><a href="https://vr.org/articles/pico-space-program-build-with-ai-50000-kotlin-double-unity-2026">VR.org</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>Gucci puts a Times Square runway show on Vision Pro, with mixed results</h3>
+    <p>"GucciCore" is free in the Gucci app as 180-degree immersive video, including an arrivals segment of nearly ten minutes. UploadVR's reviewer found the footage impressive. She also found that a constant music track covers the live sound, that jumps between camera positions distract, and that few people were told it exists.</p>
+    <p class="why"><b>Why it matters</b> A luxury brand treating immersive video as a marketing channel is new. The complaints are the familiar craft problems of live capture: transitions and audio.</p>
+    <div class="src"><a href="https://www.uploadvr.com/guccis-vision-pro-runway-show-offers-immersive-access-but-the-luxury-experience-falls-short/">UploadVR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Content</span>
+    <h3>Smash Drums adds fingertip drumming on miniature kits</h3>
+    <p>A free update on 2 December adds Tiny Drums, a mixed-reality mode where you play a small drum kit with your fingertips. It runs on Quest 3 and 3S and is promised for Meta's VR Glasses next spring. Older Quest headsets get hand tracking but not the new mode.</p>
+    <div class="src"><a href="https://www.uploadvr.com/smash-drums-update-will-put-tiny-drums-at-your-fingertips/">UploadVR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Money</span>
+    <h3>Xreal drops its Black Friday codes and keeps the prices</h3>
+    <p>Xreal's sale page lost its promo codes on 19 November but lists the prices those codes produced, according to VR.org's store checks. The One Pro is $499, the 1S $379, the One $399, and the Android XR Aura $1,099 against a $1,279 list price. The 1 Pro+ stays at $599.</p>
+    <div class="src"><a href="https://vr.org/articles/xreal-black-friday-november-19-promo-codes-gone-same-prices-one-pro-499-2026">VR.org</a><a href="https://vr.org/articles/this-week-in-vr-2026-11-20">VR.org weekly roundup</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Watchlist</span>
+    <h3>Dates for the next three weeks</h3>
+    <ul class="short">
+      <li><b>25 Nov</b> Deadline for Meta to answer nine questions from Senators Wyden and Markey about its camera glasses, per VR.org's weekly roundup.</li>
+      <li><b>10 Dec</b> A crowded day: Android XR glasses go on general sale, The Game Awards air, and the town-builder <i>Outlanders VR</i> arrives on Quest and Steam (I saw only a summary of that announcement).</li>
+    </ul>
+    <div class="src"><a href="https://vr.org/articles/this-week-in-vr-2026-11-20">VR.org weekly roundup</a><a href="https://vr.org/articles/outlanders-vr-december-10-quest-steam-free-pc-demo-since-october-2026">Outlanders VR</a></div>
+  </article>
+</section>
+
+<section class="beat sea" id="ocean">
+  <h2>Marine science <span>5 items + briefs · 5 min</span></h2>
+
+  <article>
+    <span class="chip">Climate · Science</span>
+    <h3>Antarctic ice cliffs collapse in bursts, then stall</h3>
+    <p>Also quiet here: nothing dated this weekend, so these are from 17 to 19 November. An MIT, WHOI and Michigan team used ICESat-2 laser altimetry to follow more than 15,000 Antarctic ice cliffs every three months from 2019 to 2023. The average cliff stood about 30 m, and only a few passed the roughly 100 m height at which theory says cliffs fail under their own weight. The tallest was 127 m.</p>
+    <p>At the four tallest sites, cliffs sometimes retreated faster than models predict, but briefly, and some glaciers advanced again. Thick ice mélange, deep water and rising bedrock acted as brakes.</p>
+    <p class="why"><b>Why it matters</b> Runaway cliff collapse drives the worst-case sea-level projections, and models trigger it on height alone. Four years and four detailed sites is a short record, and the authors do not call the ice sheet safe.</p>
+    <div class="src"><a href="https://sciencedaily.com/releases/2026/11/261117033925.htm">ScienceDaily</a><a href="https://doi.org/10.1126/science.aee0658">Science paper</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Oxygen · Paleo</span>
+    <h3>A Pacific low-oxygen zone barely moved through the ice ages</h3>
+    <p>Nitrogen isotopes locked inside foraminifera shells from a core at 6°N in the eastern Pacific span about 265,000 years. Values at the last glacial maximum (10.3‰, 14 samples) nearly match the late Holocene (10.8‰, 13 samples). The southern edge of the North Pacific oxygen-deficient zone was therefore about the same in cold and warm periods. Its variation followed orbital sunlight patterns, not global temperature.</p>
+    <p class="why"><b>Why it matters</b> Older bulk-sediment records suggested these zones shrank in glacial times; the authors attribute that signal to alteration of the sediment. This is one core at the zone's margin, so forecasts for a warmer ocean remain inference.</p>
+    <div class="src"><a href="https://www.nature.com/articles/s41561-026-02143-6">Nature Geoscience (open access)</a></div>
+  </article>
+
+  <article>
+    <span class="chip">El Niño · Observatories</span>
+    <h3>Monterey Bay's diatoms vanish as deep water off British Columbia sets a heat record</h3>
+    <p>MBARI's imaging instrument saw diatoms drop on 4 October and largely disappear by 8 October. Satellite chlorophyll off Big Sur fell about tenfold in places, and a mooring logged a record 19.22 °C at 60 m on 12 November in a series nearly 40 years long. Further north, Ocean Networks Canada measured 8.21 °C at 400 m in Barkley Canyon on 8 November, 2.49 °C above the site's long-term mean.</p>
+    <p class="why"><b>Why it matters</b> Cabled observatories are recording a strong El Niño below the surface as it happens. Neither report is peer reviewed, both regions were already warm this year, and the reported wildlife effects are anecdotal so far.</p>
+    <div class="src"><a href="https://ecomagazine.com/news/research/el-nino-drives-phytoplankton-collapse-in-monterey-bay-mbari-finds">ECO Magazine / MBARI</a><a href="https://sciencesources.eurekalert.org/news-releases/1152340">Ocean Networks Canada release</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Ecology · Fisheries</span>
+    <h3>Young emperor penguins spend their first year where krill boats fish</h3>
+    <p>Satellite tags on 48 juveniles from three Weddell Sea colonies showed a consistent trip of more than 1,500 km north to the Polar Front and back with the sea ice. Depending on the colony, the birds spent 15% to 32% of the year inside proposed marine protected areas. Juveniles from Jason Peninsula spent over 60% of February and March in recently fished zones.</p>
+    <p class="why"><b>Why it matters</b> The Weddell Sea protected area is stalled at CCAMLR, and this gives it a map of where juveniles go. The study shows overlap with fishing, not harm from it.</p>
+    <div class="src"><a href="https://sciencesources.eurekalert.org/news-releases/1152498">WHOI release</a><a href="https://doi.org/10.1016/j.biocon.2026.112175">Biological Conservation</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Ocean tech</span>
+    <h3>MBARI runs six long-range robots to rehearse offshore wind monitoring</h3>
+    <p>In two trials between August and mid-October, MBARI's long-range autonomous vehicles logged about 2,000 hours and more than 4,000 km in Monterey Bay. They collected over 100 environmental DNA samples along with plankton imaging and acoustics.</p>
+    <p class="why"><b>Why it matters</b> Docked, persistent fleets could replace ship surveys for environmental baselines at deep-water wind leases. This was a demonstration, with no published results or cost comparison yet.</p>
+    <div class="src"><a href="https://oceannews.com/news/energy/mbari-deploys-lrauv-fleet-to-monitor-offshore-wind-energy-areas">Ocean News &amp; Technology</a></div>
+  </article>
+
+  <h3 class="sub">In brief</h3>
+  <ul class="short">
+    <li><b>Heatwaves</b> After the 2021 Pacific Northwest heat dome, large mussels died high on the shore and small ones died low on it. A heat-budget model credits evaporative cooling (<i>Proceedings B</i>). One site, and the release gives no counts. <a href="https://sciencesources.eurekalert.org/news-releases/1152352">University of Washington release</a></li>
+    <li><b>Corals</b> Heated to 32 °C, a sensitive <i>Acropora</i> lost 74% of its symbionts and a tolerant <i>Pavona</i> 15%, though both hosted the same symbiont types. The tolerant host kept its membrane lipids stable. Three colonies per species. <a href="https://sciencesources.eurekalert.org/news-releases/1152408">Science China Press release</a></li>
+    <li><b>Fossils</b> A 2.7 m pygmy sperm whale relative from Peru, about 6 million years old, had both nostrils shifted left and a snout angled 31° down. The authors read it as a seafloor feeder, from one specimen. <a href="https://sciencedaily.com/releases/2026/11/261118065528.htm">ScienceDaily</a></li>
+  </ul>
+</section>
+
+<section class="beat lab" id="research">
+  <h2>XR interaction research <span>5 items · 4 min</span></h2>
+
+  <article>
+    <span class="chip">Awards · VRST</span>
+    <h3>VRST 2026 names its best papers</h3>
+    <p>The fresh arXiv listings held almost nothing new for XR, so awards lead. Two best papers: "SpatialSlides", which integrates presentation software with XR for 3D exploration (Nam, Chheang, Miao), and "Your Place or Mine?", on how sharing environmental context affects social presence in remote XR (Kaiser and colleagues).</p>
+    <p>Honorable mentions went to work on inferring competing task demands for pedestrians using AR, real versus simulated exertion in VR cycling, and engagement as the mediator of VR pain relief.</p>
+    <p class="why"><b>Why it matters</b> Titles and authors only; I found no abstracts or preprints, so I cannot report methods or results. The social presence paper is the one to find when the proceedings open.</p>
+    <div class="src"><a href="https://vrst.acm.org/vrst2026/awards/">VRST 2026 awards</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Cybersickness</span>
+    <h3>Three sliders report cybersickness by symptom without adding load</h3>
+    <p>Saha and colleagues asked whether separate in-headset sliders for nausea, oculomotor discomfort and disorientation tell you more than one discomfort slider. In a between-subjects study with 52 people on a VR rollercoaster, each symptom slider correlated best with its matching questionnaire subscale, while the single slider correlated with all of them. Usability, workload and attention on a concurrent task did not differ significantly.</p>
+    <p class="why"><b>Why it matters</b> Continuous, symptom-level labels are what prediction models lack, and the dataset is public. One stimulus, and the abstract gives no effect sizes.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.07345">arXiv 2611.07345</a></div>
+  </article>
+
+  <article>
+    <span class="chip">arXiv · Spatial audio</span>
+    <h3>Virtual sound pulls distance judgments closer</h3>
+    <p>Arend and colleagues ran two experiments with 45 participants in total, using real-time room acoustics and a virtual copy of a large lab. Binaural rendering was judged plausible in both audio AR and VR. In a walking distance task, any virtualisation lowered accuracy and raised effort, though performance stayed high. Virtual audio biased judgments toward nearer distances.</p>
+    <p class="why"><b>Why it matters</b> Plausible is not the same as accurate, which matters for training and navigation tasks. Abstract only, with no effect sizes.</p>
+    <div class="src"><a href="https://arxiv.org/abs/2611.07612">arXiv 2611.07612</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Conference</span>
+    <h3>ACM ISS opens tomorrow in Turin</h3>
+    <p>Interactive Surfaces and Spaces runs 23 to 26 November, and its programme includes a 10 Years Impact Award. Further out, ISMAR 2027 is set for Kobe on 11 to 15 October.</p>
+    <div class="src"><a href="https://iss.acm.org/2026">ISS 2026</a><a href="https://ismar.net/blog">ISMAR</a></div>
+  </article>
+
+  <article>
+    <span class="chip">Reading list</span>
+    <h3>Three to skim</h3>
+    <ul class="short">
+      <li><b>XR + AI agents</b> ControlAnything (Ryskeldiev): on a Quest 3 you pick an object and say what your hands should control, and a coding agent writes the connector. Nine of ten requests succeeded in a median 32.5 seconds, with the author as the only tester. Not peer reviewed. <a href="https://arxiv.org/pdf/2611.08321">arXiv 2611.08321</a></li>
+      <li><b>Cybersickness models</b> A transformer that predicts sickness from whichever sensors are present, trained on three public datasets; dropping a sensor shifts error by less than 0.09 (Saha, Islam, Quarles). Abstract only. <a href="https://arxiv.org/abs/2611.07386">arXiv 2611.07386</a></li>
+      <li><b>Animation</b> Learning martial arts motion skills for opponents in VR sparring games (Wen et al.). Title only; the abstract page would not load. <a href="https://arxiv.org/abs/2611.23825">arXiv 2611.23825</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  Compiled by Claude from the linked sources on 22 November 2026. It was a quiet weekend, so most items date from 19 to 21 November. Reports and rumours are labelled as such. Research items are summarised from titles and abstracts; read the papers before citing them.
+</footer>
+
+</div>
+</body>
+</html>
